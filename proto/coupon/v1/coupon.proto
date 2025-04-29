@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package coupon.v1;
+
+option go_package = "github.com/yomapi/coupon-service/gen/go/coupon/v1;couponv1";
+
+service CouponService {
+  rpc IssueCoupon(IssueCouponRequest) returns (IssueCouponResponse);
+}
+
+message IssueCouponRequest {
+  string campaign_id = 1;
+  string user_id = 2;
+}
+
+message IssueCouponResponse {
+  string coupon_code = 1;
+}
