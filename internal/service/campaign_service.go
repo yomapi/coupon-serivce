@@ -5,15 +5,15 @@ import (
 
 	couponv1 "github.com/yomapi/coupon-service/gen/go/coupon/v1"
 
-	"github.com/yomapi/coupon-service/internal/db"
 	"github.com/yomapi/coupon-service/internal/model"
+	repository "github.com/yomapi/coupon-service/internal/repository"
 )
 
 type CampaignService struct {
-	Repo *db.CampaignRepository
+	Repo *repository.CampaignRepository
 }
 
-func NewCampaignService(repo *db.CampaignRepository) *CampaignService {
+func NewCampaignService(repo *repository.CampaignRepository) *CampaignService {
 	return &CampaignService{Repo: repo}
 }
 
