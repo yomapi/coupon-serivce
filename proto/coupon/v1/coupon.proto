@@ -4,15 +4,30 @@ package coupon.v1;
 
 option go_package = "github.com/yomapi/coupon-service/gen/go/coupon/v1;couponv1";
 
+import "google/protobuf/timestamp.proto";
+
 service CouponService {
   rpc IssueCoupon(IssueCouponRequest) returns (IssueCouponResponse);
+  rpc CreateCampaign(CreateCampaignRequest) returns (CreateCampaignResponse); 
 }
 
 message IssueCouponRequest {
-  string campaign_id = 1;
-  string user_id = 2;
+  int32 campaign_id = 1;
+  int32 user_id = 2;
 }
 
 message IssueCouponResponse {
   string coupon_code = 1;
+}
+
+message CreateCampaignRequest {
+  string name = 1;
+  int32 coupon_count = 2;
+  google.protobuf.Timestamp start_at = 3; 
+  google.protobuf.Timestamp end_at = 4;   
+}
+
+message CreateCampaignResponse {
+  int32 campaign_id = 1;
+  string name=2;
 }

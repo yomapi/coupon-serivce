@@ -36,11 +36,15 @@ const (
 	// CouponServiceIssueCouponProcedure is the fully-qualified name of the CouponService's IssueCoupon
 	// RPC.
 	CouponServiceIssueCouponProcedure = "/coupon.v1.CouponService/IssueCoupon"
+	// CouponServiceCreateCampaignProcedure is the fully-qualified name of the CouponService's
+	// CreateCampaign RPC.
+	CouponServiceCreateCampaignProcedure = "/coupon.v1.CouponService/CreateCampaign"
 )
 
 // CouponServiceClient is a client for the coupon.v1.CouponService service.
 type CouponServiceClient interface {
 	IssueCoupon(context.Context, *connect_go.Request[v1.IssueCouponRequest]) (*connect_go.Response[v1.IssueCouponResponse], error)
+	CreateCampaign(context.Context, *connect_go.Request[v1.CreateCampaignRequest]) (*connect_go.Response[v1.CreateCampaignResponse], error)
 }
 
 // NewCouponServiceClient constructs a client for the coupon.v1.CouponService service. By default,
@@ -58,12 +62,18 @@ func NewCouponServiceClient(httpClient connect_go.HTTPClient, baseURL string, op
 			baseURL+CouponServiceIssueCouponProcedure,
 			opts...,
 		),
+		createCampaign: connect_go.NewClient[v1.CreateCampaignRequest, v1.CreateCampaignResponse](
+			httpClient,
+			baseURL+CouponServiceCreateCampaignProcedure,
+			opts...,
+		),
 	}
 }
 
 // couponServiceClient implements CouponServiceClient.
 type couponServiceClient struct {
-	issueCoupon *connect_go.Client[v1.IssueCouponRequest, v1.IssueCouponResponse]
+	issueCoupon    *connect_go.Client[v1.IssueCouponRequest, v1.IssueCouponResponse]
+	createCampaign *connect_go.Client[v1.CreateCampaignRequest, v1.CreateCampaignResponse]
 }
 
 // IssueCoupon calls coupon.v1.CouponService.IssueCoupon.
@@ -71,9 +81,15 @@ func (c *couponServiceClient) IssueCoupon(ctx context.Context, req *connect_go.R
 	return c.issueCoupon.CallUnary(ctx, req)
 }
 
+// CreateCampaign calls coupon.v1.CouponService.CreateCampaign.
+func (c *couponServiceClient) CreateCampaign(ctx context.Context, req *connect_go.Request[v1.CreateCampaignRequest]) (*connect_go.Response[v1.CreateCampaignResponse], error) {
+	return c.createCampaign.CallUnary(ctx, req)
+}
+
 // CouponServiceHandler is an implementation of the coupon.v1.CouponService service.
 type CouponServiceHandler interface {
 	IssueCoupon(context.Context, *connect_go.Request[v1.IssueCouponRequest]) (*connect_go.Response[v1.IssueCouponResponse], error)
+	CreateCampaign(context.Context, *connect_go.Request[v1.CreateCampaignRequest]) (*connect_go.Response[v1.CreateCampaignResponse], error)
 }
 
 // NewCouponServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -87,10 +103,17 @@ func NewCouponServiceHandler(svc CouponServiceHandler, opts ...connect_go.Handle
 		svc.IssueCoupon,
 		opts...,
 	)
+	couponServiceCreateCampaignHandler := connect_go.NewUnaryHandler(
+		CouponServiceCreateCampaignProcedure,
+		svc.CreateCampaign,
+		opts...,
+	)
 	return "/coupon.v1.CouponService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case CouponServiceIssueCouponProcedure:
 			couponServiceIssueCouponHandler.ServeHTTP(w, r)
+		case CouponServiceCreateCampaignProcedure:
+			couponServiceCreateCampaignHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -102,4 +125,8 @@ type UnimplementedCouponServiceHandler struct{}
 
 func (UnimplementedCouponServiceHandler) IssueCoupon(context.Context, *connect_go.Request[v1.IssueCouponRequest]) (*connect_go.Response[v1.IssueCouponResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("coupon.v1.CouponService.IssueCoupon is not implemented"))
+}
+
+func (UnimplementedCouponServiceHandler) CreateCampaign(context.Context, *connect_go.Request[v1.CreateCampaignRequest]) (*connect_go.Response[v1.CreateCampaignResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("coupon.v1.CouponService.CreateCampaign is not implemented"))
 }
