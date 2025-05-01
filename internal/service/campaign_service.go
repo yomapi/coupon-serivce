@@ -30,3 +30,22 @@ func (s *CampaignService) CreateCampaign(ctx context.Context, req *couponv1.Crea
 	}
 	return campaign, nil
 }
+
+func (s *CampaignService) GetCampaignWithCoupons(ctx context.Context, campaignID int32) (*model.CampaignWithCoupons, error) {
+	campaign, err := s.Repo.GetCampaign(ctx, campaignID)
+	if err != nil {
+		return nil, err
+	}
+
+	coupons, err := s.Repo.GetCouponCodesByCampaign(ctx, campaignID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.CampaignWithCoupons{
+		ID:          campaign.ID,
+		Name:        campaign.Name,
+		CouponCodes: coupons,
+	}, nil
+}
+

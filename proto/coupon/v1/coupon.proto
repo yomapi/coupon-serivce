@@ -9,6 +9,7 @@ import "google/protobuf/timestamp.proto";
 service CouponService {
   rpc IssueCoupon(IssueCouponRequest) returns (IssueCouponResponse);
   rpc CreateCampaign(CreateCampaignRequest) returns (CreateCampaignResponse); 
+  rpc GetCampaign(GetCampaignRequest) returns (GetCampaignResponse);
 }
 
 message IssueCouponRequest {
@@ -30,4 +31,14 @@ message CreateCampaignRequest {
 message CreateCampaignResponse {
   int32 campaign_id = 1;
   string name=2;
+}
+
+message GetCampaignRequest {
+  int32 campaign_id = 1;
+}
+
+message GetCampaignResponse {
+  int32 campaign_id = 1;
+  string name = 2;
+  repeated string coupon_codes = 3;
 }

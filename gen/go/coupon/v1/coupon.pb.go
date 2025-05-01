@@ -238,6 +238,110 @@ func (x *CreateCampaignResponse) GetName() string {
 	return ""
 }
 
+type GetCampaignRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CampaignId    int32                  `protobuf:"varint,1,opt,name=campaign_id,json=campaignId,proto3" json:"campaign_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetCampaignRequest) Reset() {
+	*x = GetCampaignRequest{}
+	mi := &file_coupon_v1_coupon_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetCampaignRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetCampaignRequest) ProtoMessage() {}
+
+func (x *GetCampaignRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_coupon_v1_coupon_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetCampaignRequest.ProtoReflect.Descriptor instead.
+func (*GetCampaignRequest) Descriptor() ([]byte, []int) {
+	return file_coupon_v1_coupon_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *GetCampaignRequest) GetCampaignId() int32 {
+	if x != nil {
+		return x.CampaignId
+	}
+	return 0
+}
+
+type GetCampaignResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CampaignId    int32                  `protobuf:"varint,1,opt,name=campaign_id,json=campaignId,proto3" json:"campaign_id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	CouponCodes   []string               `protobuf:"bytes,3,rep,name=coupon_codes,json=couponCodes,proto3" json:"coupon_codes,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetCampaignResponse) Reset() {
+	*x = GetCampaignResponse{}
+	mi := &file_coupon_v1_coupon_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetCampaignResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetCampaignResponse) ProtoMessage() {}
+
+func (x *GetCampaignResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_coupon_v1_coupon_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetCampaignResponse.ProtoReflect.Descriptor instead.
+func (*GetCampaignResponse) Descriptor() ([]byte, []int) {
+	return file_coupon_v1_coupon_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *GetCampaignResponse) GetCampaignId() int32 {
+	if x != nil {
+		return x.CampaignId
+	}
+	return 0
+}
+
+func (x *GetCampaignResponse) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *GetCampaignResponse) GetCouponCodes() []string {
+	if x != nil {
+		return x.CouponCodes
+	}
+	return nil
+}
+
 var File_coupon_v1_coupon_proto protoreflect.FileDescriptor
 
 const file_coupon_v1_coupon_proto_rawDesc = "" +
@@ -257,10 +361,19 @@ const file_coupon_v1_coupon_proto_rawDesc = "" +
 	"\x16CreateCampaignResponse\x12\x1f\n" +
 	"\vcampaign_id\x18\x01 \x01(\x05R\n" +
 	"campaignId\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name2\xb4\x01\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\"5\n" +
+	"\x12GetCampaignRequest\x12\x1f\n" +
+	"\vcampaign_id\x18\x01 \x01(\x05R\n" +
+	"campaignId\"m\n" +
+	"\x13GetCampaignResponse\x12\x1f\n" +
+	"\vcampaign_id\x18\x01 \x01(\x05R\n" +
+	"campaignId\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12!\n" +
+	"\fcoupon_codes\x18\x03 \x03(\tR\vcouponCodes2\x82\x02\n" +
 	"\rCouponService\x12L\n" +
 	"\vIssueCoupon\x12\x1d.coupon.v1.IssueCouponRequest\x1a\x1e.coupon.v1.IssueCouponResponse\x12U\n" +
-	"\x0eCreateCampaign\x12 .coupon.v1.CreateCampaignRequest\x1a!.coupon.v1.CreateCampaignResponseB<Z:github.com/yomapi/coupon-service/gen/go/coupon/v1;couponv1b\x06proto3"
+	"\x0eCreateCampaign\x12 .coupon.v1.CreateCampaignRequest\x1a!.coupon.v1.CreateCampaignResponse\x12L\n" +
+	"\vGetCampaign\x12\x1d.coupon.v1.GetCampaignRequest\x1a\x1e.coupon.v1.GetCampaignResponseB<Z:github.com/yomapi/coupon-service/gen/go/coupon/v1;couponv1b\x06proto3"
 
 var (
 	file_coupon_v1_coupon_proto_rawDescOnce sync.Once
@@ -274,23 +387,27 @@ func file_coupon_v1_coupon_proto_rawDescGZIP() []byte {
 	return file_coupon_v1_coupon_proto_rawDescData
 }
 
-var file_coupon_v1_coupon_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_coupon_v1_coupon_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_coupon_v1_coupon_proto_goTypes = []any{
 	(*IssueCouponRequest)(nil),     // 0: coupon.v1.IssueCouponRequest
 	(*IssueCouponResponse)(nil),    // 1: coupon.v1.IssueCouponResponse
 	(*CreateCampaignRequest)(nil),  // 2: coupon.v1.CreateCampaignRequest
 	(*CreateCampaignResponse)(nil), // 3: coupon.v1.CreateCampaignResponse
-	(*timestamppb.Timestamp)(nil),  // 4: google.protobuf.Timestamp
+	(*GetCampaignRequest)(nil),     // 4: coupon.v1.GetCampaignRequest
+	(*GetCampaignResponse)(nil),    // 5: coupon.v1.GetCampaignResponse
+	(*timestamppb.Timestamp)(nil),  // 6: google.protobuf.Timestamp
 }
 var file_coupon_v1_coupon_proto_depIdxs = []int32{
-	4, // 0: coupon.v1.CreateCampaignRequest.start_at:type_name -> google.protobuf.Timestamp
-	4, // 1: coupon.v1.CreateCampaignRequest.end_at:type_name -> google.protobuf.Timestamp
+	6, // 0: coupon.v1.CreateCampaignRequest.start_at:type_name -> google.protobuf.Timestamp
+	6, // 1: coupon.v1.CreateCampaignRequest.end_at:type_name -> google.protobuf.Timestamp
 	0, // 2: coupon.v1.CouponService.IssueCoupon:input_type -> coupon.v1.IssueCouponRequest
 	2, // 3: coupon.v1.CouponService.CreateCampaign:input_type -> coupon.v1.CreateCampaignRequest
-	1, // 4: coupon.v1.CouponService.IssueCoupon:output_type -> coupon.v1.IssueCouponResponse
-	3, // 5: coupon.v1.CouponService.CreateCampaign:output_type -> coupon.v1.CreateCampaignResponse
-	4, // [4:6] is the sub-list for method output_type
-	2, // [2:4] is the sub-list for method input_type
+	4, // 4: coupon.v1.CouponService.GetCampaign:input_type -> coupon.v1.GetCampaignRequest
+	1, // 5: coupon.v1.CouponService.IssueCoupon:output_type -> coupon.v1.IssueCouponResponse
+	3, // 6: coupon.v1.CouponService.CreateCampaign:output_type -> coupon.v1.CreateCampaignResponse
+	5, // 7: coupon.v1.CouponService.GetCampaign:output_type -> coupon.v1.GetCampaignResponse
+	5, // [5:8] is the sub-list for method output_type
+	2, // [2:5] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
 	2, // [2:2] is the sub-list for extension extendee
 	0, // [0:2] is the sub-list for field type_name
@@ -307,7 +424,7 @@ func file_coupon_v1_coupon_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_coupon_v1_coupon_proto_rawDesc), len(file_coupon_v1_coupon_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

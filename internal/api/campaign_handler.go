@@ -2,7 +2,9 @@ package api
 
 import (
 	"context"
+	"database/sql"
 	"errors"
+	"fmt"
 	"log"
 
 	couponv1 "github.com/yomapi/coupon-service/gen/go/coupon/v1"
@@ -73,4 +75,26 @@ func (h *CampaignHandler) IssueCoupon(
 	}
 
 	return h.CouponService.IssueCoupon(ctx, req.Msg)
+}
+
+func (h *CampaignHandler) GetCampaign(
+	ctx context.Context,
+	req *connect.Request[couponv1.GetCampaignRequest],
+) (*connect.Response[couponv1.GetCampaignResponse], error) {
+	log.Printf("GetCampaign: campaignID=%d", req.Msg.CampaignId)
+
+	campaign, err := h.CampaignService.GetCampaignWithCoupons(ctx, req.Msg.CampaignId)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, connect.NewError(connect.CodeNotFound, fmt.Errorf("campaign not found"))
+		}
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+
+	resp := connect.NewResponse(&couponv1.GetCampaignResponse{
+		CampaignId:  campaign.ID,
+		Name:        campaign.Name,
+		CouponCodes: campaign.CouponCodes,
+	})
+	return resp, nil
 }

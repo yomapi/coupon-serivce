@@ -9,3 +9,9 @@ type Campaign struct {
 	StartAt     time.Time
 	EndAt       time.Time
 }
+
+type CampaignWithCoupons struct {
+	ID          int32
+	Name        string
+	CouponCodes []string
+}
