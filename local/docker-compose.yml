@@ -1,0 +1,91 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: local-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: coupon_service
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+
+  redis:
+    image: redis:7
+    container_name: local-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
+
+  localstack:
+    image: localstack/localstack:latest
+    container_name: local-localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=lambda,sqs
+      - DEFAULT_REGION=us-east-1
+      - LAMBDA_EXECUTOR=docker
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - backend
+
+  campaign-manager:
+    build:
+      context: ../
+      dockerfile: local/Dockerfile.campaign-manager
+    container_name: campaign-manager
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - DB_NAME=coupon_service
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SQS_QUEUE_URL=http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/coupon-queue
+      - AWS_ACCESS_KEY_ID=dummy
+      - AWS_SECRET_ACCESS_KEY=dummy
+      - AWS_REGION=us-east-1
+    depends_on:
+      - postgres
+      - redis
+      - localstack
+    networks:
+      - backend
+
+  scheduler:
+    build:
+      context: ../
+      dockerfile: local/Dockerfile.scheduler
+    container_name: scheduler
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - DB_NAME=coupon_service
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SQS_QUEUE_URL=http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/coupon-queue
+      - AWS_ACCESS_KEY_ID=dummy
+      - AWS_SECRET_ACCESS_KEY=dummy
+      - AWS_REGION=us-east-1
+
+    depends_on:
+      - postgres
+      - redis
+      - localstack
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
