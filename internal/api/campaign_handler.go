@@ -14,11 +14,18 @@ import (
 )
 
 type CampaignHandler struct {
-	Service *service.CampaignService
+	CampaignService *service.CampaignService
+	CouponService   *service.CouponService
 }
 
-func NewCampaignHandler(s *service.CampaignService) couponv1connect.CouponServiceHandler {
-	return &CampaignHandler{Service: s}
+func NewCampaignHandler(
+	campaignService *service.CampaignService,
+	couponService *service.CouponService,
+) couponv1connect.CouponServiceHandler {
+	return &CampaignHandler{
+		CampaignService: campaignService,
+		CouponService:   couponService,
+	}
 }
 
 func (h *CampaignHandler) CreateCampaign(
@@ -42,7 +49,7 @@ func (h *CampaignHandler) CreateCampaign(
 		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("start_at must be before end_at"))
 	}
 
-	campaign, err := h.Service.CreateCampaign(ctx, req.Msg)
+	campaign, err := h.CampaignService.CreateCampaign(ctx, req.Msg)
 	if err != nil {
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
@@ -59,5 +66,11 @@ func (h *CampaignHandler) IssueCoupon(
 	ctx context.Context,
 	req *connect.Request[couponv1.IssueCouponRequest],
 ) (*connect.Response[couponv1.IssueCouponResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("IssueCoupon is not implemented"))
+	log.Printf("IssueCoupon: campaignID=%d, userID=%d", req.Msg.CampaignId, req.Msg.UserId)
+
+	if req.Msg.CampaignId <= 0 || req.Msg.UserId <= 0 {
+		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("campaign_id and user_id must be positive"))
+	}
+
+	return h.CouponService.IssueCoupon(ctx, req.Msg)
 }

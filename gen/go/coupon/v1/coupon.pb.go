@@ -76,7 +76,7 @@ func (x *IssueCouponRequest) GetUserId() int32 {
 
 type IssueCouponResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	CouponCode    string                 `protobuf:"bytes,1,opt,name=coupon_code,json=couponCode,proto3" json:"coupon_code,omitempty"`
+	Rank          int64                  `protobuf:"varint,1,opt,name=rank,proto3" json:"rank,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -111,11 +111,11 @@ func (*IssueCouponResponse) Descriptor() ([]byte, []int) {
 	return file_coupon_v1_coupon_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *IssueCouponResponse) GetCouponCode() string {
+func (x *IssueCouponResponse) GetRank() int64 {
 	if x != nil {
-		return x.CouponCode
+		return x.Rank
 	}
-	return ""
+	return 0
 }
 
 type CreateCampaignRequest struct {
@@ -246,10 +246,9 @@ const file_coupon_v1_coupon_proto_rawDesc = "" +
 	"\x12IssueCouponRequest\x12\x1f\n" +
 	"\vcampaign_id\x18\x01 \x01(\x05R\n" +
 	"campaignId\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\x05R\x06userId\"6\n" +
-	"\x13IssueCouponResponse\x12\x1f\n" +
-	"\vcoupon_code\x18\x01 \x01(\tR\n" +
-	"couponCode\"\xb8\x01\n" +
+	"\auser_id\x18\x02 \x01(\x05R\x06userId\")\n" +
+	"\x13IssueCouponResponse\x12\x12\n" +
+	"\x04rank\x18\x01 \x01(\x03R\x04rank\"\xb8\x01\n" +
 	"\x15CreateCampaignRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12!\n" +
 	"\fcoupon_count\x18\x02 \x01(\x05R\vcouponCount\x125\n" +

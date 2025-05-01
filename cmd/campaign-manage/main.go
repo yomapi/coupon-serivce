@@ -8,6 +8,7 @@ import (
 	"github.com/yomapi/coupon-service/gen/go/coupon/v1/couponv1connect"
 	"github.com/yomapi/coupon-service/internal/api"
 	"github.com/yomapi/coupon-service/internal/db"
+	"github.com/yomapi/coupon-service/internal/redis"
 	"github.com/yomapi/coupon-service/internal/repository"
 	"github.com/yomapi/coupon-service/internal/service"
 )
@@ -21,9 +22,17 @@ func main() {
 	}
 	defer pool.Close()
 
-	repo := repository.NewCampaignRepository(pool)
-	campaignService := service.NewCampaignService(repo)
-	handler := api.NewCampaignHandler(campaignService)
+	redisClient := redis.NewRedisClient()
+
+
+	campaignRepo := repository.NewCampaignRepository(pool)
+	couponRepo := repository.NewCouponRepository(pool)
+	couponQueueRepo := repository.NewCouponQueueRepository(redisClient)
+
+	campaignService := service.NewCampaignService(campaignRepo)
+	couponService := service.NewCouponService(couponQueueRepo, couponRepo)
+	
+	handler := api.NewCampaignHandler(campaignService, couponService)
 
 	mux := http.NewServeMux()
 	path, h := couponv1connect.NewCouponServiceHandler(handler)

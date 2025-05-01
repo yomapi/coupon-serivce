@@ -17,7 +17,7 @@ message IssueCouponRequest {
 }
 
 message IssueCouponResponse {
-  string coupon_code = 1;
+  int64 rank = 1;
 }
 
 message CreateCampaignRequest {
