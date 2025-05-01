@@ -53,9 +53,10 @@ func (s *CouponService) IssueCoupon(ctx context.Context, req *couponv1.IssueCoup
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 
+
 	
 	resp := connect.NewResponse(&couponv1.IssueCouponResponse{
-		Rank: rank, 
+		Rank: rank + 1, 
 	})
 	return resp, nil
 }

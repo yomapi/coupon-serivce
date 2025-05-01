@@ -8,5 +8,4 @@ type Coupon struct {
 	UserID 			int32
 	CampaignID	int32
 	IssuedAt    time.Time
-	ExpireAt    time.Time
 }
