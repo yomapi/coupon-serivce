@@ -6,13 +6,28 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/google/uuid"
 	_ "github.com/lib/pq"
 	"github.com/redis/go-redis/v9"
 )
+
+var charMap = map[rune]rune{
+	'a': '가', 'b': '나', 'c': '다', 'd': '라',
+	'e': '마', 'f': '바', 'g': '사', 'h': '아',
+	'i': '자', 'j': '차', 'k': '카', 'l': '타',
+	'm': '파', 'n': '하', 'o': '거', 'p': '너',
+	'q': '더', 'r': '러', 's': '머', 't': '버',
+	'u': '서', 'v': '어', 'w': '저', 'x': '처',
+	'y': '커', 'z': '터',
+	'0': '0', '1': '1', '2': '2', '3': '3',
+	'4': '4', '5': '5', '6': '6', '7': '7',
+	'8': '8', '9': '9',
+}
 
 type CouponMessage struct {
 	CampaignID int32  `json:"campaign_id"`
@@ -83,6 +98,8 @@ func handler(ctx context.Context, sqsEvent events.SQSEvent) error {
 	return nil
 }
 
+
+
 func issueCoupon(ctx context.Context, db *sql.DB, campaignID int32, userID string, code string) error {
 	query := `
 		INSERT INTO coupons (code, user_id, campaign_id, issued_at)
@@ -93,8 +110,26 @@ func issueCoupon(ctx context.Context, db *sql.DB, campaignID int32, userID strin
 }
 
 func generateCouponCode() string {
-	return fmt.Sprintf("COUPON-%d", time.Now().UnixNano())
+	u := uuid.New().String()
+	cleaned := strings.ReplaceAll(u, "-", "")
+
+	var builder strings.Builder
+	runeCount := 0
+
+	for _, ch := range cleaned {
+		mapped, ok := charMap[ch]
+		if ok {
+			builder.WriteRune(mapped)
+			runeCount++
+		}
+		if runeCount >= 16 {
+			break
+		}
+	}
+
+	return builder.String()
 }
+
 
 func main() {
 	lambda.Start(handler)
